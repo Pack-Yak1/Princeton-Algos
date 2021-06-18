@@ -79,7 +79,23 @@ public class Percolation {
 
     // is the site (row, col) open?
     public boolean isOpen(int row, int col) {
-
+        int idx = indexOf(row, col);
+        int upIdx = row == 1 ? 0 : indexOf(row - 1, col);
+        int downIdx = row == n ? n * n + 1 : indexOf(row + 1, col);
+        if (col != 1) {
+            int leftIdx = indexOf(row, col - 1);
+            if (root(leftIdx, percGrid) != root(idx, percGrid)) {
+                return false;
+            }
+        }
+        if (col != n) {
+            int rightIdx = indexOf(row, col + 1);
+            if (root(rightIdx, percGrid) != root(idx, percGrid)) {
+                return false;
+            }
+        }
+        return root(idx, percGrid) == root(upIdx, percGrid) &&
+                root(idx, percGrid) == root(downIdx, percGrid);
     }
 
     // is the site (row, col) full?
