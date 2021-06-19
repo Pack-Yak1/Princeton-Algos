@@ -4,16 +4,15 @@
  *  Last modified:     1/1/2019
  **************************************************************************** */
 
-import java.util.Arrays;
+import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-    private int[] fillGrid;
-    private int[] percGrid;
-    private int[] sizeGrid;
-    private boolean[] openGrid;
+    private final WeightedQuickUnionUF fillGrid;
+    private final WeightedQuickUnionUF percGrid;
+    private final boolean[] openGrid;
     private int openSites;
-    private int n;
-    private int endIdx;
+    private final int n;
+    private final int endIdx;
 
     // creates n-by-n grid, with all sites initially blocked
     public Percolation(int n) {
@@ -21,47 +20,16 @@ public class Percolation {
             throw new IllegalArgumentException();
         }
         endIdx = n * n + 2;
-        fillGrid = new int[endIdx];
-        for (int i = 0; i < endIdx; i++) {
-            fillGrid[i] = i;
-        }
-        percGrid = new int[endIdx];
-        for (int i = 0; i < endIdx; i++) {
-            percGrid[i] = i;
-        }
-        sizeGrid = new int[endIdx];
-        for (int i = 0; i < endIdx; i++) {
-            sizeGrid[i] = 0;
-        }
+        fillGrid = new WeightedQuickUnionUF(endIdx);
+        percGrid = new WeightedQuickUnionUF(endIdx);
         openGrid = new boolean[endIdx];
-        Arrays.fill(openGrid, false);
+        for (int i = 0; i < endIdx; i++) {
+            openGrid[i] = false;
+        }
         openGrid[0] = true;
         openGrid[endIdx - 1] = true;
         openSites = 0;
         this.n = n;
-    }
-
-    private int root(int i, int[] grid) {
-        while (i != grid[i]) {
-            grid[i] = grid[grid[i]];
-            i = grid[i];
-        }
-        return i;
-    }
-
-    private void union(int p, int q, int[] grid) {
-        int idx1 = root(p, grid);
-        int idx2 = root(q, grid);
-        if (idx1 != idx2) {
-            if (sizeGrid[idx1] < sizeGrid[idx2]) {
-                grid[idx1] = idx2;
-                sizeGrid[idx2] += sizeGrid[idx1];
-            }
-            else {
-                grid[idx2] = idx1;
-                sizeGrid[idx1] += sizeGrid[idx2];
-            }
-        }
     }
 
     private int indexOf(int row, int col) {
@@ -81,28 +49,28 @@ public class Percolation {
             int idx = indexOf(row, col);
             int upIdx = row == 1 ? 0 : indexOf(row - 1, col);
             if (openGrid[upIdx]) {
-                union(idx, upIdx, fillGrid);
-                union(idx, upIdx, percGrid);
+                fillGrid.union(idx, upIdx);
+                percGrid.union(idx, upIdx);
             }
             if (col != 1) {
                 int leftIdx = indexOf(row, col - 1);
                 if (openGrid[leftIdx]) {
-                    union(idx, leftIdx, fillGrid);
-                    union(idx, leftIdx, percGrid);
+                    fillGrid.union(idx, leftIdx);
+                    percGrid.union(idx, leftIdx);
                 }
             }
             if (col != n) {
                 int rightIdx = indexOf(row, col + 1);
                 if (openGrid[rightIdx]) {
-                    union(idx, rightIdx, fillGrid);
-                    union(idx, rightIdx, percGrid);
+                    fillGrid.union(idx, rightIdx);
+                    percGrid.union(idx, rightIdx);
                 }
             }
             int downIdx = row == n ? n * n + 1 : indexOf(row + 1, col);
             if (openGrid[downIdx]) {
-                union(idx, downIdx, percGrid);
+                percGrid.union(idx, downIdx);
                 if (row != n) {
-                    union(idx, downIdx, fillGrid);
+                    fillGrid.union(idx, downIdx);
                 }
             }
             openSites++;
@@ -112,13 +80,14 @@ public class Percolation {
 
     // is the site (row, col) open?
     public boolean isOpen(int row, int col) {
+        argCheck(row, col);
         return openGrid[indexOf(row, col)];
     }
 
     // is the site (row, col) full?
     public boolean isFull(int row, int col) {
         argCheck(row, col);
-        return root(0, fillGrid) == root(indexOf(row, col), fillGrid);
+        return fillGrid.find(0) == fillGrid.find(indexOf(row, col));
     }
 
     // returns the number of open sites
@@ -128,11 +97,11 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        return root(0, percGrid) == root(endIdx - 1, percGrid);
+        return percGrid.find(0) == percGrid.find(endIdx - 1);
     }
 
     // test client (optional)
     public static void main(String[] args) {
-
+        //    Chose not to implement
     }
 }
