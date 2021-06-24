@@ -41,29 +41,35 @@ public class Deque<Item> implements Iterable<Item> {
             return 0;
         }
         // Full => size() == arr.length
-        if (start + 1 == end) {
+        if ((start + 1) % arr.length == end) {
             return arr.length;
         }
         return end <= start ? end + arr.length - start - 1 : end - start - 1;
     }
 
-    public void resize(int len) {
+    private void resize(int len) {
+        // System.out.println("Resizing occurred");
+        // System.out.println(String.format("new arr has length %d", len));
+        // System.out.println(String.format("old arr was not empty: %b", !isEmpty()));
         Item[] newArr = (Item[]) new Object[len];
         int newStart = len - 1;
         int newEnd = 0;
         if (!isEmpty()) {
-            for (int i = (start + 1) % arr.length; i != end - 1; i = (i + 1) % arr.length) {
+            int startIdx = (start + 1) % arr.length;
+            boolean firstRound = startIdx == end;
+            for (int i = startIdx; i != end || firstRound;
+                 i = (i + 1) % arr.length) {
+                if (i == startIdx && i == end) {
+                    firstRound = false;
+                }
+                // System.out.println(String.format("i = %d, newEnd = %d", i, newEnd));
                 newArr[newEnd] = arr[i];
                 newEnd = (newEnd + 1) % newArr.length;
             }
         }
-        System.out.println(len);
         arr = newArr;
         start = newStart;
         end = newEnd;
-        for (int i = 0; i < len; i++) {
-            System.out.println(arr[i]);
-        }
     }
 
     // add the item to the front
@@ -75,7 +81,8 @@ public class Deque<Item> implements Iterable<Item> {
             resize(arr.length * 2);
         }
         arr[start] = item;
-        start = (start - 1) % arr.length;
+        start = (start - 1);
+        start = start < 0 ? start + arr.length : start;
     }
 
     // add the item to the back
@@ -127,10 +134,21 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     private class DequeIterator implements Iterator<Item> {
-        private int i = start + 1;
+        private int i = (start + 1) % arr.length;
+        private boolean justStarted = true;
 
         public boolean hasNext() {
-            return !isEmpty() && i != end - 1;
+            // For handling full arrays
+            if (i == (start + 1) % arr.length && i == end) {
+                if (justStarted) {
+                    justStarted = false;
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            return arr[i] != null;
         }
 
         public void remove() {
@@ -141,8 +159,9 @@ public class Deque<Item> implements Iterable<Item> {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
+            Item item = arr[i];
             i = (i + 1) % arr.length;
-            return arr[i - 1];
+            return item;
         }
     }
 
@@ -176,12 +195,27 @@ public class Deque<Item> implements Iterable<Item> {
         System.out.println(
                 String.format("Testing removeLast on deque with 1 element added to back: %s",
                               d.removeLast() == 4 ? "Passed" : "Failed"));
-        for (int i = 0; i < 9; i++) {
+        d.addFirst(1);
+        d.iterator();
+        d.addFirst(2);
+        d.iterator();
+
+        for (int i = 0; i < 100; i++) {
             d.addLast(i);
         }
-        System.out.println(d.size());
+        System.out.println(String.format("After adding 100 elements, size is %d", d.size()));
+        System.out.println("Testing iterator (should see 0 to 99)");
         for (Integer i : d) {
             System.out.println(i);
+        }
+        System.out.println("Finished testing iterator");
+        for (int i = 0; i < 100; i++) {
+            if (i < 50) {
+                System.out.println(d.removeFirst());
+            }
+            else {
+                System.out.println(d.removeLast());
+            }
         }
     }
 

@@ -25,6 +25,7 @@
   <component name="FindBugs-IDEA-Workspace">
     <analyzeAfterCompile>true</analyzeAfterCompile>
     <toolWindowToFront>false</toolWindowToFront>
+    <toolWindowEditorPreview>false</toolWindowEditorPreview>
   </component>
   <component name="ProjectId" id="1uI6RETJaqqeQ5gYA3YAA0SpH7j" />
   <component name="ProjectViewState">
@@ -42,9 +43,20 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="settings.saveactions" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Deque">
     <configuration name="Deque" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="Deque" />
+      <module name="Algorithms, Part I" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Permutation" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="Permutation" />
+      <module name="Algorithms, Part I" />
+      <option name="PROGRAM_PARAMETERS" value="10" />
+      <method v="2" />
+    </configuration>
+    <configuration name="RandomizedQueue" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="RandomizedQueue" />
       <module name="Algorithms, Part I" />
       <method v="2" />
     </configuration>
@@ -62,21 +74,25 @@
     </todo-panel>
   </component>
   <component name="WindowStateProjectService">
-    <state width="958" height="298" key="GridCell.Tab.0.bottom" timestamp="1624427610727">
+    <state width="958" height="295" key="GridCell.Tab.0.bottom" timestamp="1624497726372">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="958" height="298" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1624427610727" />
-    <state width="958" height="298" key="GridCell.Tab.0.center" timestamp="1624427610726">
+    <state width="958" height="295" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1624497726372" />
+    <state width="958" height="295" key="GridCell.Tab.0.center" timestamp="1624497726372">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="958" height="298" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1624427610726" />
-    <state width="958" height="298" key="GridCell.Tab.0.left" timestamp="1624427610726">
+    <state width="958" height="295" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1624497726372" />
+    <state width="958" height="295" key="GridCell.Tab.0.left" timestamp="1624497726372">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="958" height="298" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1624427610726" />
-    <state width="958" height="298" key="GridCell.Tab.0.right" timestamp="1624427610726">
+    <state width="958" height="295" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1624497726372" />
+    <state width="958" height="295" key="GridCell.Tab.0.right" timestamp="1624497726372">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="958" height="298" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1624427610726" />
+    <state width="958" height="295" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1624497726372" />
+    <state x="1096" y="177" width="672" height="676" key="search.everywhere.popup" timestamp="1624459287645">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="1096" y="177" width="672" height="676" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1624459287645" />
   </component>
 </project>
