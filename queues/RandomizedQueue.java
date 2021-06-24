@@ -62,7 +62,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         Item item = arr[i];
         size--;
         arr[i] = arr[size];
-        arr[size] = item;
+        arr[size] = null;
         return item;
     }
 
@@ -81,7 +81,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     private class RQIterator implements Iterator<Item> {
         private int idx;
-        private int[] order;
+        private final int[] order;
 
         public RQIterator() {
             idx = 0;
