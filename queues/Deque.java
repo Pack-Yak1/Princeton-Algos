@@ -134,21 +134,25 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     private class DequeIterator implements Iterator<Item> {
-        private int i = (start + 1) % arr.length;
-        private boolean justStarted = true;
+        private final int s = (start + 1) % arr.length;
+        private int i = s;
+        private boolean seenEnd = false;
 
         public boolean hasNext() {
+            if (isEmpty()) {
+                return false;
+            }
             // For handling full arrays
-            if (i == (start + 1) % arr.length && i == end) {
-                if (justStarted) {
-                    justStarted = false;
+            if (i == s && i == end) {
+                if (!seenEnd) {
+                    seenEnd = true;
                     return true;
                 }
                 else {
                     return false;
                 }
             }
-            return arr[i] != null;
+            return i != end;
         }
 
         public void remove() {

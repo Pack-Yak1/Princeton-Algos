@@ -68,6 +68,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // return a random item (but do not remove it)
     public Item sample() {
+        if (isEmpty()) {
+            throw new NoSuchElementException();
+        }
         return arr[StdRandom.uniform(size)];
     }
 
@@ -77,16 +80,20 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     private class RQIterator implements Iterator<Item> {
-        private final RandomizedQueue<Item> r;
+        private int idx;
+        private int[] order;
 
         public RQIterator() {
-            r = new RandomizedQueue<Item>();
-            r.arr = arr;
-            r.size = size;
+            idx = 0;
+            order = new int[size];
+            for (int i = 0; i < size; i++) {
+                order[i] = i;
+            }
+            StdRandom.shuffle(order);
         }
 
         public boolean hasNext() {
-            return !r.isEmpty();
+            return idx < size;
         }
 
         public void remove() {
@@ -97,7 +104,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            return r.dequeue();
+            Item item = arr[order[idx]];
+            idx++;
+            return item;
         }
     }
 
@@ -137,6 +146,15 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         for (int i = 0; i < s; i++) {
             System.out.println(d.dequeue());
         }
-        System.out.printf("Size after removing all 20 elements: %d", d.size());
+        System.out.printf("Size after removing all 20 elements: %d\n", d.size());
+        System.out.println("Testing nested iterator");
+        for (int i = 0; i < 5; i++) {
+            d.enqueue(i);
+        }
+        for (Integer i : d) {
+            for (Integer j : d) {
+                System.out.printf("i = %d, j = %d\n", i, j);
+            }
+        }
     }
 }
