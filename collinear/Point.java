@@ -107,18 +107,28 @@ public class Point implements Comparable<Point> {
     }
 
     private class PointComparator implements Comparator<Point> {
-        private Point p;
+        private final Point p;
 
         public PointComparator(Point p) {
             this.p = p;
         }
 
         public int compare(Point p1, Point p2) {
-            int i = (int) (p.slopeTo(p1) - p.slopeTo(p2));
-            if (i == 0) {
+            if (p.slopeTo(p1) == Double.POSITIVE_INFINITY
+                    && p.slopeTo(p2) == Double.POSITIVE_INFINITY) {
                 return 0;
             }
-            return i > 0 ? 1 : -1;
+            else if (p.slopeTo(p1) == Double.NEGATIVE_INFINITY
+                    && p.slopeTo(p2) == Double.NEGATIVE_INFINITY) {
+                return 0;
+            }
+            else {
+                double i = (p.slopeTo(p1) - p.slopeTo(p2));
+                if (i == 0) {
+                    return 0;
+                }
+                return i > 0 ? 1 : -1;
+            }
         }
     }
 
