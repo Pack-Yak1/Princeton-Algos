@@ -4,8 +4,6 @@
  *  Description:
  **************************************************************************** */
 
-import edu.princeton.cs.algs4.StdRandom;
-
 import java.util.ArrayList;
 
 public class Board {
@@ -29,7 +27,7 @@ public class Board {
         }
     }
 
-    public Board(Board b) {
+    private Board(Board b) {
         int n = b.dimension();
         int[][] outputTiles = new int[n][n];
         for (int i = 0; i < n; i++) {
@@ -46,13 +44,15 @@ public class Board {
     public String toString() {
         int n = dimension();
         StringBuilder sb = new StringBuilder();
+        sb.append('\n');
         sb.append(n);
         for (int i = 0; i < n; i++) {
             sb.append('\n');
+            sb.append(' ');
             for (int j = 0; j < n; j++) {
                 sb.append(tiles[i][j]);
                 if (j != n - 1) {
-                    sb.append(' ');
+                    sb.append("  ");
                 }
             }
         }
@@ -72,7 +72,13 @@ public class Board {
             for (int j = 0; j < n; j++) {
                 int position = (1 + (n * i) + j) % (n * n);
                 if (tiles[i][j] != position) {
-                    d++;
+                    if (position != 0) {
+                        d++;
+                    }
+                    // System.out.println(this);
+                    // System.out
+                    //         .printf("position = %d, value = %d, d = %d\n", position, tiles[i][j],
+                    //                 d);
                 }
             }
         }
@@ -86,9 +92,11 @@ public class Board {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 int tile = tiles[i][j];
-                int row = (tile - 1) / n;
-                int col = (tile - 1) % n;
-                sum += Math.abs(row - i) + Math.abs(col - j);
+                if (tile != 0) {
+                    int row = (tile - 1) / n;
+                    int col = (tile - 1) % n;
+                    sum += Math.abs(row - i) + Math.abs(col - j);
+                }
             }
         }
         return sum;
@@ -101,7 +109,7 @@ public class Board {
 
     // does this board equal y?
     public boolean equals(Object y) {
-        if (y == null || !(y.getClass() == Board.class)) {
+        if (y == null || this.getClass() != y.getClass()) {
             return false;
         }
         Board b = (Board) y;
@@ -133,21 +141,25 @@ public class Board {
         if (zeroRow > 0) {
             Board up = new Board(this);
             up.swap(zeroRow, zeroCol, zeroRow - 1, zeroCol);
+            up.zeroRow--;
             output.add(up);
         }
         if (zeroCol > 0) {
             Board left = new Board(this);
             left.swap(zeroRow, zeroCol, zeroRow, zeroCol - 1);
+            left.zeroCol--;
             output.add(left);
         }
         if (zeroRow < n - 1) {
             Board down = new Board(this);
             down.swap(zeroRow, zeroCol, zeroRow + 1, zeroCol);
+            down.zeroRow++;
             output.add(down);
         }
         if (zeroCol < n - 1) {
             Board right = new Board(this);
             right.swap(zeroRow, zeroCol, zeroRow, zeroCol + 1);
+            right.zeroCol++;
             output.add(right);
         }
         return output;
@@ -159,22 +171,34 @@ public class Board {
         int n = output.dimension();
         //    Pick 2 random positions. If first position is 0, shift left/right.
         //    If second position is 0, shift up/down.
-        int i1 = StdRandom.uniform(0, n);
-        int j1 = StdRandom.uniform(0, n);
-        int i2 = StdRandom.uniform(0, n);
-        int j2 = StdRandom.uniform(0, n);
+        int i1 = 0;
+        int j1 = 0;
         if (i1 == zeroRow && j1 == zeroCol) {
-            j1 = j1 > 0 ? j1 - 1 : j1 + 1;
+            j1 = j1 + 1;
         }
-        if (i2 == zeroRow && j2 == zeroCol) {
+        int i2 = n - 1;
+        int j2 = n - 1;
+        if ((i2 == zeroRow && j2 == zeroCol) || (i2 == i1 && j2 == j1)) {
             j2 = j2 > 0 ? j2 - 1 : j2 + 1;
+            if ((i2 == zeroRow && j2 == zeroCol) || (i2 == i1 && j2 == j1)) {
+                i2 = i2 > 0 ? i2 - 1 : i2 + 1;
+            }
         }
-        output.swap(i1, j2, i2, j2);
+        output.swap(i1, j1, i2, j2);
         return output;
     }
 
     // unit testing (not graded)
     public static void main(String[] args) {
-
+        int[][] arr1 = { { 3, 1 }, { 0, 2 } };
+        int[][] arr2 = { { 1, 0 }, { 3, 2 } };
+        Board b = new Board(arr1);
+        Board c = new Board(arr2);
+        for (Board x : b.neighbors()) {
+            System.out.println(x);
+        }
+        for (Board x : c.neighbors()) {
+            System.out.println(x);
+        }
     }
 }
